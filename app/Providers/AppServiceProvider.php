@@ -1,24 +1,26 @@
 <?php
-
 namespace App\Providers;
 
+use App\Repositories\CuentaRepository;
+use App\Services\CuentaService;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
 {
-    /**
-     * Register any application services.
-     */
-    public function register(): void
+    public function register()
     {
-        //
+        $this->app->singleton(CuentaRepository::class, function () {
+            return new CuentaRepository();
+        });
+
+        $this->app->singleton(CuentaService::class, function ($app) {
+            return new CuentaService($app->make(CuentaRepository::class));
+        });
     }
 
-    /**
-     * Bootstrap any application services.
-     */
     public function boot(): void
     {
         //
     }
 }
+
